@@ -1,12 +1,15 @@
 import streamlit as st
 import pandas as pd
-import pickle
+import joblib
 
 # ------------------------------
 # Load the trained model
 # ------------------------------
-with open("logistic_model.pkl", "rb") as f:
-    model = pickle.load(f)
+try:
+    model = joblib.load("logistic_model.pkl")
+except Exception as e:
+    st.error(f"⚠️ Could not load the model: {e}")
+    st.stop()
 
 st.title("Loan Status Prediction App")
 st.write("This app predicts **Loan Status** using a trained Logistic Regression model.")
@@ -61,3 +64,4 @@ with st.form("prediction_form"):
 
         prediction = model.predict(input_data)[0]
         st.success(f"Predicted Loan Status: **{prediction}**")
+
